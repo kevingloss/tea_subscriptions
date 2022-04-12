@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_12_161226) do
+ActiveRecord::Schema.define(version: 2022_04_12_163931) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 2022_04_12_161226) do
   end
 
   create_table "subscriptions", force: :cascade do |t|
-    t.float "price"
+    t.integer "price"
     t.integer "status"
     t.integer "frequency"
     t.bigint "customer_id"
@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 2022_04_12_161226) do
     t.bigint "subscription_id"
     t.bigint "tea_id"
     t.integer "tea_qty"
-    t.float "tea_price"
+    t.integer "tea_price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["subscription_id"], name: "index_tea_subscriptions_on_subscription_id"
