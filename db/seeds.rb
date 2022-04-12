@@ -6,9 +6,25 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-FactoryBot.create_list(:customer, 10)
-FactoryBot.create_list(:tea, 100)
-FactoryBot.create_list(:subscription, 3, status: 0, customer: Customer.first)
-FactoryBot.create_list(:subscription, 2, status: 1, customer: Customer.first)
-FactoryBot.create_list(:subscription, 2, status: 0, customer: Customer.second)
-FactoryBot.create_list(:subscription, 2, status: 1, customer: Customer.second)
+FactoryBot.create_list(:customer, 3)
+cust_1 = Customer.first
+cust_2 = Customer.second 
+cust_3 = Customer.third
+
+# Customer 1
+sub_1 = FactoryBot.create(:subscription, status: 0, customer: cust_1)
+FactoryBot.create_list(:tea_subscription, 2, subscription: sub_1)
+sub_2 = FactoryBot.create(:subscription, status: 1, customer: cust_1)
+FactoryBot.create_list(:tea_subscription, 2, subscription: sub_2)
+
+# Customer 2
+sub_3 = FactoryBot.create(:subscription, status: 0, customer: cust_2)
+FactoryBot.create_list(:tea_subscription, 2, subscription: sub_3)
+sub_4 = FactoryBot.create(:subscription, status: 1, customer: cust_2)
+FactoryBot.create_list(:tea_subscription, 2, subscription: sub_4)
+
+# Customer 3
+sub_5 = FactoryBot.create(:subscription, status: 0, customer: cust_3)
+FactoryBot.create_list(:tea_subscription, 2, subscription: sub_5)
+sub_6 = FactoryBot.create(:subscription, status: 1, customer: cust_3)
+FactoryBot.create_list(:tea_subscription, 2, subscription: sub_6)
