@@ -6,7 +6,7 @@
 - <a href="#setup">Setup</a>
 - <a href="#testing">Testing</a>
 - <a href="#endpoint-request-response-examples">Endpoint Request Response Examples</a>
-- <a href="#reference">References</a>
+- <a href="#references">References</a>
 - <a href="#author">Author</a>
 
 
@@ -43,24 +43,23 @@ $ rails s
 ```
    - Open Web Broswer and visit `http://localhost:3000/<insert_path>`
    - Please see below endpoints for example request/responses
-- The endpoints can also be [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/95b1ddea1de99d5917d3?action=collection%2Fimport)
+- The endpoints can also be tested in Postman
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/95b1ddea1de99d5917d3?action=collection%2Fimport)
 
 ## Endpoint Request Response Examples
 ### Create Customer Tea Subscription
-<details>
-  <summary> Request </summary>
-  ```shell
-   POST /api/v1/customers/1/subscriptions
-   Content-Type: application/json
-   Accept: application/json
-   body
-   {
-    "order": [{"tea_id": "1", "qty": "40"}, {"tea_id": "2", "qty": "80"}, {"tea_id": "3", "qty": "16"}]
-    }
-  ```
-</details>
-<details>
-  <summary> Response </summary>
+- Request:
+ ```shell
+  POST /api/v1/customers/1/subscriptions
+ Content-Type: application/json
+ Accept: application/json
+ body
+ {
+  "order": [{"tea_id": "1", "qty": "40"}, {"tea_id": "2", "qty": "80"}, {"tea_id": "3", "qty": "16"}]
+ }
+ ```
+
+- Response:
   ```shell
     {
     "data": {
@@ -106,11 +105,10 @@ $ rails s
     }
   }
   ```
-</details>
 
 ### Updates a Customer Tea Subscription:
-<details>
-  <summary> Request </summary>
+
+- Request:
   ```shell
    PATCH /api/v1/customers/1/subscriptions/1
    Content-Type: application/json
@@ -120,9 +118,7 @@ $ rails s
     "status": "cancelled"
    }
   ```
-</details>
-<details>
-  <summary> Response </summary>
+- Response:
   ```shell
   {
     "data": {
@@ -158,18 +154,15 @@ $ rails s
     }
   }
   ```
-</details>
 
 ### Get Customers Active/Pending Subscriptions:
 
-<details>
-  <summary> Request </summary>
+- Request:
   ```shell
    GET /api/v1/customers/1/subscriptions
   ```
-</details>
-<details>
-  <summary> Response </summary>
+
+- Response:
   ```shell
   {
     "data": [
@@ -238,7 +231,6 @@ $ rails s
     ]
   }
   ```
-</details>
 
 ## References
 - [Turing Prompt](https://mod4.turing.edu/projects/take_home/take_home_be)
