@@ -32,6 +32,16 @@ RSpec.describe "Subscriptions", type: :request do
       expect(response.status).to eq(200)
       expect(message).to eq('You have no subscriptions currently.')
     end
+
+    it 'throws an error when customer does not exist' do 
+      headers = { 'CONTENT_TYPE' => 'application/json' }
+      get api_v1_customer_subscriptions_path(0), headers: headers
+
+      message = parse_json[:message]
+
+      expect(response.status).to eq(404)
+      expect(message).to eq('Customer does not exist.')
+    end
   end
 
   describe "POST /create" do
@@ -74,8 +84,10 @@ RSpec.describe "Subscriptions", type: :request do
       expect(data[:attributes][:total_price]).to be_a(Integer)
       expect(data[:attributes][:teas]).to be_a(Array)
     end
+  end
 
-    xit 'fails to create a subscription' do 
+  describe "PATCH /update" do
+    it 'update the status to cancelled' do 
       customer = create(:customer)
       t1 = create(:tea)
       t2 = create(:tea)
@@ -83,17 +95,52 @@ RSpec.describe "Subscriptions", type: :request do
 
       headers = { 'CONTENT_TYPE' => 'application/json' }
       body = {
+        order: [{tea_id: t1.id, qty: 40}, {tea_id: t2.id, qty: 80}, {tea_id: t3.id, qty: 16}]
       }
-
+      
       post api_v1_customer_subscriptions_path(customer), headers: headers, params: JSON.generate(body)
 
       data = parse_json[:data]
 
-      expect(response.status).to eq(201)
-      expect(data[:attributes][:status]).to eq('pending')
+      expect(data[:attributes][:status]).to eq('active')
       expect(data[:attributes][:frequency]).to eq('monthly')
-      expect(data[:attributes][:total_price]).to be_a(Integer)
-      expect(data[:attributes][:teas]).to be_a(Array)
+
+      params = {
+        status: 'cancelled',
+        frequency: 'weekly'
+      }
+
+      patch api_v1_customer_subscription_path(customer, Subscription.last), headers: headers, params: JSON.generate(params)
+      
+      data = parse_json[:data]
+
+      expect(response.status).to eq(200)
+      expect(data[:attributes][:status]).to eq('cancelled')
+      expect(data[:attributes][:frequency]).to eq('weekly')
+    end
+
+    it 'throw an error if the subscription does not exist' do 
+      customer = create(:customer)
+      t1 = create(:tea)
+      t2 = create(:tea)
+      t3 = create(:tea)
+
+      headers = { 'CONTENT_TYPE' => 'application/json' }
+      body = {
+        order: [{tea_id: t1.id, qty: 40}, {tea_id: t2.id, qty: 80}, {tea_id: t3.id, qty: 16}]
+      }
+      params = {
+        status: 'cancelled'
+      }
+
+      post api_v1_customer_subscriptions_path(customer), headers: headers, params: JSON.generate(body)
+
+      patch api_v1_customer_subscription_path(customer, 0), headers: headers, params: JSON.generate(params)
+      
+      message = parse_json[:message]
+
+      expect(response.status).to eq(404)
+      expect(message).to eq('Subscription does not exist.')
     end
   end
 end
