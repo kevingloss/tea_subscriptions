@@ -4,10 +4,10 @@ RSpec.describe "Subscriptions", type: :request do
   describe "GET /index" do
     it 'lists out all active/canceled subscriptions' do 
       customer = create(:customer)
-      sub_1 = FactoryBot.create(:subscription, status: 0, customer: customer)
-      FactoryBot.create_list(:tea_subscription, 2, subscription: sub_1)
-      sub_2 = FactoryBot.create(:subscription, status: 1, customer: customer)
-      FactoryBot.create_list(:tea_subscription, 2, subscription: sub_2)
+      sub_1 = create(:subscription, status: 0, customer: customer)
+      create_list(:tea_subscription, 2, subscription: sub_1)
+      sub_2 = create(:subscription, status: 1, customer: customer)
+      create_list(:tea_subscription, 2, subscription: sub_2)
 
       headers = { 'CONTENT_TYPE' => 'application/json' }
       
@@ -31,6 +31,69 @@ RSpec.describe "Subscriptions", type: :request do
 
       expect(response.status).to eq(200)
       expect(message).to eq('You have no subscriptions currently.')
+    end
+  end
+
+  describe "POST /create" do
+    it 'create a new subscription for a customer' do 
+      customer = create(:customer)
+      t1 = create(:tea)
+      t2 = create(:tea)
+      t3 = create(:tea)
+
+      headers = { 'CONTENT_TYPE' => 'application/json' }
+      body = {
+        order: [{tea_id: t1.id, qty: 40}, {tea_id: t2.id, qty: 80}, {tea_id: t3.id, qty: 16}]
+      }
+
+      post api_v1_customer_subscriptions_path(customer), headers: headers, params: JSON.generate(body)
+
+      data = parse_json[:data]
+
+      expect(response.status).to eq(201)
+      expect(data[:attributes][:status]).to eq('active')
+      expect(data[:attributes][:frequency]).to eq('monthly')
+      expect(data[:attributes][:total_price]).to be_a(Integer)
+      expect(data[:attributes][:teas]).to be_a(Array)
+    end
+
+    it 'creates a pending subscription for a customer' do 
+      customer = create(:customer)
+
+      headers = { 'CONTENT_TYPE' => 'application/json' }
+      body = {
+      }
+
+      post api_v1_customer_subscriptions_path(customer), headers: headers, params: JSON.generate(body)
+
+      data = parse_json[:data]
+
+      expect(response.status).to eq(201)
+      expect(data[:attributes][:status]).to eq('pending')
+      expect(data[:attributes][:frequency]).to eq('monthly')
+      expect(data[:attributes][:total_price]).to be_a(Integer)
+      expect(data[:attributes][:teas]).to be_a(Array)
+    end
+
+    xit 'fails to create a subscription' do 
+      customer = create(:customer)
+      t1 = create(:tea)
+      t2 = create(:tea)
+      t3 = create(:tea)
+
+      headers = { 'CONTENT_TYPE' => 'application/json' }
+      body = {
+      }
+
+      post api_v1_customer_subscriptions_path(customer), headers: headers, params: JSON.generate(body)
+
+      data = parse_json[:data]
+
+      expect(response.status).to eq(201)
+      expect(data[:attributes][:status]).to eq('pending')
+      expect(data[:attributes][:frequency]).to eq('monthly')
+      expect(data[:attributes][:total_price]).to be_a(Integer)
+      expect(data[:attributes][:teas]).to be_a(Array)
     end
   end
 end

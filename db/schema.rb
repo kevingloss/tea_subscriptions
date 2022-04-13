@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 2022_04_12_173726) do
 
   create_table "subscriptions", force: :cascade do |t|
     t.integer "status", default: 0
-    t.integer "frequency", default: 0
+    t.integer "frequency", default: 2
     t.bigint "customer_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
