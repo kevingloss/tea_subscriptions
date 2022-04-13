@@ -84,27 +84,6 @@ RSpec.describe "Subscriptions", type: :request do
       expect(data[:attributes][:total_price]).to be_a(Integer)
       expect(data[:attributes][:teas]).to be_a(Array)
     end
-
-    xit 'fails to create a subscription' do 
-      customer = create(:customer)
-      t1 = create(:tea)
-      t2 = create(:tea)
-      t3 = create(:tea)
-
-      headers = { 'CONTENT_TYPE' => 'application/json' }
-      body = {
-      }
-
-      post api_v1_customer_subscriptions_path(customer), headers: headers, params: JSON.generate(body)
-
-      data = parse_json[:data]
-
-      expect(response.status).to eq(201)
-      expect(data[:attributes][:status]).to eq('pending')
-      expect(data[:attributes][:frequency]).to eq('monthly')
-      expect(data[:attributes][:total_price]).to be_a(Integer)
-      expect(data[:attributes][:teas]).to be_a(Array)
-    end
   end
 
   describe "PATCH /update" do

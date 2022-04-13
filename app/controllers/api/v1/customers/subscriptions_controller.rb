@@ -26,16 +26,12 @@ class Api::V1::Customers::SubscriptionsController < ApplicationController
       end
 
       render json: SubscriptionSerializer.new(subscription), status: :created 
-    else
-      render json: { message: subscription.errors }, status: :unprocessable_entity
     end
   end
 
   def update 
     if @subscription.update(subscription_params)
       render json: SubscriptionSerializer.new(@subscription), status: :ok
-    else
-      render json: { message: @subscription.errors }, status: :unprocessable_entity
     end
   end
 
