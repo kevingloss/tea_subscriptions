@@ -49,15 +49,15 @@ $ rails s
 ## Endpoint Request Response Examples
 ### Create Customer Tea Subscription
 - Request:
- ```shell
+  ```shell
   POST /api/v1/customers/1/subscriptions
- Content-Type: application/json
- Accept: application/json
- body
- {
-  "order": [{"tea_id": "1", "qty": "40"}, {"tea_id": "2", "qty": "80"}, {"tea_id": "3", "qty": "16"}]
- }
- ```
+  Content-Type: application/json
+  Accept: application/json
+  body:
+  {
+   "order": [{"tea_id": "1", "qty": "40"}, {"tea_id": "2", "qty": "80"}, {"tea_id": "3", "qty": "16"}]
+  }
+  ```
 
 - Response:
   ```shell
