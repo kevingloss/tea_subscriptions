@@ -3,7 +3,7 @@ class Api::V1::Customers::SubscriptionsController < ApplicationController
   before_action :find_subscription, only: [:update]
 
   def index
-    subscriptions = @customer.subscriptions
+    subscriptions = @customer.not_pending_subscriptions
 
     if subscriptions.empty?
       render json: { message: 'You have no subscriptions currently.' }, status: :ok 
