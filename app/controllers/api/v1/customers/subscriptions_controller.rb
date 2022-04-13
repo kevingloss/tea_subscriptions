@@ -1,5 +1,6 @@
 class Api::V1::Customers::SubscriptionsController < ApplicationController
-  before_action :find_customer, only: [:index, :create, :update]
+  before_action :find_customer, only: [:index, :create]
+  before_action :find_subscription, only: [:update]
 
   def index
     subscriptions = @customer.subscriptions
@@ -26,17 +27,29 @@ class Api::V1::Customers::SubscriptionsController < ApplicationController
 
       render json: SubscriptionSerializer.new(subscription), status: :created 
     else
-      render json: subscription.errors, status: :unprocessable_entity
+      render json: { message: subscription.errors }, status: :unprocessable_entity
     end
   end
 
   def update 
-
+    if @subscription.update(subscription_params)
+      render json: SubscriptionSerializer.new(@subscription), status: :ok
+    else
+      render json: { message: @subscription.errors }, status: :unprocessable_entity
+    end
   end
 
   private
     def find_customer 
       @customer = Customer.find(params[:customer_id])
+    rescue ActiveRecord::RecordNotFound
+      render json: { message: 'Customer does not exist.' }, status: :not_found
+    end
+
+    def find_subscription
+      @subscription = Subscription.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      render json: { message: 'Subscription does not exist.' }, status: :not_found
     end
 
     def subscription_params 
