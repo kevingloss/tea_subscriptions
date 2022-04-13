@@ -12,7 +12,10 @@
 
 ## Project Description
 
-Tea Subscriptions simulates a take home challenge that can be expected during the interview process. The project is left fairly open and provides the space to design endpoints in a fashion I thought best and explain those choices.
+Tea Subscriptions simulates a take home challenge that can be expected during the interview process. The project is left fairly open and provides the space to design endpoints in a fashion I thought best and explain those choices. The prompt asks for a customer to be able to create a subscription, cancel a subscription, and display all active/cancelled subscriptions.
+
+### Schema
+<img width="571" alt="Screen Shot 2022-04-13 at 4 27 26 PM" src="https://user-images.githubusercontent.com/83426676/163280356-a5b16046-4838-4293-aaf4-e844a9edc1bf.png">
 
 ## Getting Started
 ### Versions
