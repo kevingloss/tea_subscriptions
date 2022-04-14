@@ -24,23 +24,24 @@ class Api::V1::Customers::SubscriptionsController < ApplicationController
   end
 
   def update
-    if valid_status?(params[:status]) && @subscription.update(subscription_params)
+    begin 
+      @subscription.update(subscription_params)
       render json: SubscriptionSerializer.new(@subscription), status: :ok
-    else
-      render json: { message: 'Error please check status/frequency input.' }, status: :bad_request
+    rescue ArgumentError => error 
+      render json: { message: error.message }, status: :bad_request
     end
   end
 
   private
     def find_customer 
       @customer = Customer.find(params[:customer_id])
-    rescue ActiveRecord::RecordNotFound
+    rescue ActiveRecord::RecordNotFound => error 
       render json: { message: 'Customer does not exist.' }, status: :not_found
     end
 
     def find_subscription
       @subscription = Subscription.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
+    rescue ActiveRecord::RecordNotFound => error 
       render json: { message: 'Subscription does not exist.' }, status: :not_found
     end
 
