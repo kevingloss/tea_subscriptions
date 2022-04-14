@@ -4,12 +4,9 @@ class Api::V1::Customers::SubscriptionsController < ApplicationController
 
   def index
     subscriptions = @customer.not_pending_subscriptions
-
-    if subscriptions.empty?
-      render json: { message: 'You have no subscriptions currently.' }, status: :ok 
-    else
-      render json: SubscriptionSerializer.new(subscriptions), status: :ok
-    end
+   
+    return render json: { message: 'You have no subscriptions currently.' }, status: :ok if subscriptions.empty?
+    render json: SubscriptionSerializer.new(subscriptions), status: :ok
   end
 
   def create 
@@ -29,9 +26,11 @@ class Api::V1::Customers::SubscriptionsController < ApplicationController
     end
   end
 
-  def update 
-    if @subscription.update(subscription_params)
+  def update
+    if valid_status?(params[:status]) && @subscription.update(subscription_params)
       render json: SubscriptionSerializer.new(@subscription), status: :ok
+    else
+      render json: { message: 'Error please check status/frequency input.' }, status: :bad_request
     end
   end
 
@@ -50,5 +49,9 @@ class Api::V1::Customers::SubscriptionsController < ApplicationController
 
     def subscription_params 
       params.permit(:status, :frequency)
+    end
+
+    def valid_status?(status)
+      status == 'active' || status == 'cancelled' || status == 'pending'
     end
 end
