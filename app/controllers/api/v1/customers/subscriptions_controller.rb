@@ -14,10 +14,7 @@ class Api::V1::Customers::SubscriptionsController < ApplicationController
 
     if subscription.save
       if params[:order].present?
-        params[:order].each do |order|
-          tea = Tea.find(order[:tea_id])
-          TeaSubscription.create(tea: tea, subscription: subscription, tea_price: tea.price, tea_qty: order[:qty])
-        end
+        subscription.place_orders(params[:order])
       else
         subscription.pending!
       end
