@@ -119,6 +119,31 @@ RSpec.describe "Subscriptions", type: :request do
       expect(data[:attributes][:frequency]).to eq('weekly')
     end
 
+    it 'throw an error if the subscription does not update' do 
+      customer = create(:customer)
+      t1 = create(:tea)
+      t2 = create(:tea)
+      t3 = create(:tea)
+
+      headers = { 'CONTENT_TYPE' => 'application/json' }
+      body = {
+        order: [{tea_id: t1.id, qty: 40}, {tea_id: t2.id, qty: 80}, {tea_id: t3.id, qty: 16}]
+      }
+      params = {
+        status: 'more tea please',
+        stuff: 'coffee please'
+      }
+
+      post api_v1_customer_subscriptions_path(customer), headers: headers, params: JSON.generate(body)
+
+      patch api_v1_customer_subscription_path(customer, Subscription.last), headers: headers, params: JSON.generate(params)
+      
+      message = parse_json[:message]
+
+      expect(response.status).to eq(400)
+      expect(message).to eq('Error please check status/frequency input.')
+    end
+
     it 'throw an error if the subscription does not exist' do 
       customer = create(:customer)
       t1 = create(:tea)

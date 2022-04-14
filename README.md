@@ -110,7 +110,7 @@ $ rails s
   ```
 
 ### Updates a Customer Tea Subscription:
-
+Happy Path:
 - Request:
   ```shell
    PATCH /api/v1/customers/1/subscriptions/1
@@ -157,7 +157,24 @@ $ rails s
     }
   }
   ```
-
+Sad Path:
+- Request:
+  ```shell
+   PATCH /api/v1/customers/1/subscriptions/1
+   Content-Type: application/json
+   Accept: application/json
+   body
+   {
+    "status": "coffee please"
+   }
+  ```
+- Response:
+  ```shell
+  {
+    "message": "Error please check status/frequency input."
+  }
+  ```
+  
 ### Get Customers Active/Pending Subscriptions:
 
 - Request:
